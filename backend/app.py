@@ -4,7 +4,9 @@ import sqlite3
 import datetime
 
 app = Flask(__name__)
-CORS(app)
+app = Flask(__name__)
+CORS(app, origins=["https://ecommerce-chatbot-frontend-mqbu.onrender.com"])
+
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
