@@ -33,9 +33,7 @@ It allows users to:
 
 
 Backend (Flask API)
-bash
-Copy
-Edit
+
 # Go to backend folder
 cd backend
 
@@ -51,9 +49,7 @@ python app.py
 
 
  Frontend (React)
-bash
-Copy
-Edit
+
 # Go to frontend folder
 cd frontend
 
