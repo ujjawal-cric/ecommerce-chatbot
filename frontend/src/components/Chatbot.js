@@ -6,6 +6,8 @@ const Chatbot = () => {
   const [input, setInput] = useState('');
   const user = 'user123';
   const chatEndRef = useRef(null);
+
+  const API_URL = 'https://ecommerce-chatbot-backend-jala.onrender.com';
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -16,13 +18,13 @@ const Chatbot = () => {
     const newMessages = [...messages, { sender: 'user', text: input }];
     setMessages(newMessages);
 
-    await fetch('http://localhost:5000/conversation', {
+    await fetch(`${API_URL}/conversation`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user, message: input })
     });
 
-    const res = await fetch(`http://localhost:5000/search?q=${input}`);
+    const res = await fetch(`${API_URL}/search?q=${input}`);
     const products = await res.json();
 
     if (products.length === 0) {
@@ -45,7 +47,7 @@ const Chatbot = () => {
   };
 
   const addToCart = async (productId) => {
-    await fetch('http://localhost:5000/cart/add', {
+    await fetch(`${API_URL}/cart/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user, product_id: productId, quantity: 1 })
@@ -54,7 +56,7 @@ const Chatbot = () => {
   };
 
   const viewCart = async () => {
-    const res = await fetch(`http://localhost:5000/cart/view?user=${user}`);
+    const res = await fetch(`${API_URL}/cart/view?user=${user}`);
     const items = await res.json();
     if (items.length === 0) {
       setMessages(prev => [...prev, { sender: 'bot', text: '🛒 Your cart is empty.' }]);
@@ -69,7 +71,7 @@ const Chatbot = () => {
   };
 
   const checkout = async () => {
-    await fetch('http://localhost:5000/cart/checkout', {
+    await fetch(`${API_URL}/cart/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user })
