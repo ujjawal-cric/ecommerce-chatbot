@@ -3,7 +3,10 @@
 An interactive, modern **E-Commerce Sales Chatbot** for an electronics store — built with:
 - Frontend: React.js
 - Backend: Flask (Python) + SQLite database
+  
 https://ecommerce-chatbot-frontend-mqbu.onrender.com/
+
+
 It allows users to:
 ✅ Search products  
 ✅ View product details  
