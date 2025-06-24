@@ -4,6 +4,7 @@ import './Chatbot.css';
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const user = 'user123';
   const chatEndRef = useRef(null);
 
@@ -17,6 +18,7 @@ const Chatbot = () => {
 
     const newMessages = [...messages, { sender: 'user', text: input }];
     setMessages(newMessages);
+     setIsLoading(true);
 
     await fetch(`${API_URL}/conversation`, {
       method: 'POST',
@@ -44,6 +46,7 @@ const Chatbot = () => {
     }
 
     setInput('');
+    setIsLoading(false);
   };
 
   const addToCart = async (productId) => {
@@ -81,39 +84,77 @@ const Chatbot = () => {
   const handleResetChat = () => {
     setMessages([]);
 };
+const suggestedItems = [
+    'iPhone 14',
+    'Samsung TV',
+    'Sony Headphones',
+    'Dell Laptop',
+    'Canon Camera',
+    'Logitech Mouse',
+    'JBL Speaker',
+    'Apple Watch',
+    'Lenovo Tablet',
+    'HP Printer'
+  ];
 
+ 
+   
+return (
+    <div className="chatbot-layout">
+      
+      {/* Left: Chat Area */}
+      <div className="chatbot-container">
+        <div className="chatbot-header">🛍️ Electronics Store Chatbot</div>
 
-  return (
-    <div className="chatbot-container">
-      <div className="chatbot-header">🛍️ Electronics Store Chatbot</div>
+        <div className="chatbot-messages">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`chat-bubble ${msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}
+            >
+              {msg.content ? msg.content : msg.text}
+            </div>
+          ))}
+          {isLoading && (
+    <div className="chat-bubble bot-bubble">
+      <div className="loader"></div>
+    </div>
+  )}
+          <div ref={chatEndRef} />
+        </div>
 
-      <div className="chatbot-messages">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`chat-bubble ${msg.sender === 'user' ? 'user-bubble' : 'bot-bubble'}`}
-          >
-            {msg.content ? msg.content : msg.text}
-          </div>
-        ))}
-        <div ref={chatEndRef} />
+        <div className="chatbot-input">
+          <input
+            type="text"
+            placeholder="Type a message..."
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && sendMessage()}
+          />
+          <button onClick={sendMessage}>Send</button>
+          <button onClick={viewCart}>View Cart</button>
+          <button onClick={checkout}>Checkout</button>
+          <button onClick={handleResetChat}>Reset</button>
+        </div>
       </div>
 
-      <div className="chatbot-input">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && sendMessage()}
-        />
-        <button onClick={sendMessage}>Send</button>
-        <button onClick={viewCart}>View Cart</button>
-        <button onClick={checkout}>Checkout</button>
-        <button onClick={handleResetChat}>Reset</button>
+      {/* Right: Suggested Items Section */}
+      <div className="suggested-items">
+        <h3>📋 Suggested Items</h3>
+        <ul>
+          {suggestedItems.map((item, index) => (
+            <li key={index} onClick={() => setInput(item)}>
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
+
+ 
+    
   );
 };
 
 export default Chatbot;
+
